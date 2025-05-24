@@ -1,0 +1,708 @@
+{
+	"info": {
+		"_postman_id": "e9f1adee-bbc3-4e47-b4b1-bd2a9338485b",
+		"name": "restful-booker automation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39810581"
+	},
+	"item": [
+		{
+			"name": "Ping",
+			"item": [
+				{
+					"name": "API should be up and running",
+					"item": [
+						{
+							"name": "ping",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The user should receive status code 201 in the response\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://restful-booker.herokuapp.com/ping",
+									"protocol": "https",
+									"host": [
+										"restful-booker",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"ping"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Positive Scenarios",
+					"item": [
+						{
+							"name": "Verify user successfully auth with valid credentials",
+							"item": [
+								{
+									"name": "auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let jsonData;",
+													"pm.test(\"The user should receive status code 200 in the response\", function () {",
+													"    pm.response.to.have.status(200);",
+													"    jsonData = pm.response.json();",
+													"});",
+													"pm.test(\"Response contains 'token' and it is a string\", function () {",
+													"    pm.expect(jsonData).to.have.property(\"token\").that.is.a(\"string\");",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"password123\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://restful-booker.herokuapp.com/auth",
+											"protocol": "https",
+											"host": [
+												"restful-booker",
+												"herokuapp",
+												"com"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Negative Scenarios",
+					"item": [
+						{
+							"name": "Verify that authentication fails when no request body is sent",
+							"item": [
+								{
+									"name": "auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let jsonData;",
+													"",
+													"pm.test(\"The user should receive a 200 OK response\", function () {",
+													"    pm.response.to.have.status(200);",
+													"    jsonData = pm.response.json();",
+													"});",
+													"",
+													"pm.test(\"'reason' in response body equals 'Bad credentials'\", function () {",
+													"    pm.expect(jsonData.reason).to.eql(\"Bad credentials\");",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "https://restful-booker.herokuapp.com/auth",
+											"protocol": "https",
+											"host": [
+												"restful-booker",
+												"herokuapp",
+												"com"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Verify that authentication fails when the username field is empty in the request payload",
+							"item": [
+								{
+									"name": "auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let jsonData;",
+													"",
+													"pm.test(\"The user should receive a 200 OK response\", function () {",
+													"    pm.response.to.have.status(200);",
+													"    jsonData = pm.response.json();",
+													"});",
+													"",
+													"pm.test(\"'reason' in response body equals 'Bad credentials'\", function () {",
+													"    pm.expect(jsonData.reason).to.eql(\"Bad credentials\");",
+													"});",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"username\": \"\",\n    \"password\": \"password123\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://restful-booker.herokuapp.com/auth",
+											"protocol": "https",
+											"host": [
+												"restful-booker",
+												"herokuapp",
+												"com"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Verify that authentication fails when the username field is a space (\" \") character",
+							"item": [
+								{
+									"name": "auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let jsonData;",
+													"",
+													"pm.test(\"The user should receive a 200 OK response\", function () {",
+													"    pm.response.to.have.status(200);",
+													"    jsonData = pm.response.json();",
+													"});",
+													"",
+													"pm.test(\"'reason' in response body equals 'Bad credentials'\", function () {",
+													"    pm.expect(jsonData.reason).to.eql(\"Bad credentials\");",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"username\": \" \",\n    \"password\": \"password123\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://restful-booker.herokuapp.com/auth",
+											"protocol": "https",
+											"host": [
+												"restful-booker",
+												"herokuapp",
+												"com"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Verify that authentication fails when the username field is wrong in the request payload",
+							"item": [
+								{
+									"name": "auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let jsonData;",
+													"",
+													"pm.test(\"The user should receive a 200 OK response\", function () {",
+													"    pm.response.to.have.status(200);",
+													"    jsonData = pm.response.json();",
+													"});",
+													"",
+													"pm.test(\"'reason' in response body equals 'Bad credentials'\", function () {",
+													"    pm.expect(jsonData.reason).to.eql(\"Bad credentials\");",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"username\": \"asd\",\n    \"password\": \"password123\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://restful-booker.herokuapp.com/auth",
+											"protocol": "https",
+											"host": [
+												"restful-booker",
+												"herokuapp",
+												"com"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Verify that authentication fails when the password field is empty",
+							"item": [
+								{
+									"name": "auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let jsonData;",
+													"",
+													"pm.test(\"The user should receive a 200 OK response\", function () {",
+													"    pm.response.to.have.status(200);",
+													"    jsonData = pm.response.json();",
+													"});",
+													"",
+													"pm.test(\"'reason' in response body equals 'Bad credentials'\", function () {",
+													"    pm.expect(jsonData.reason).to.eql(\"Bad credentials\");",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://restful-booker.herokuapp.com/auth",
+											"protocol": "https",
+											"host": [
+												"restful-booker",
+												"herokuapp",
+												"com"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Verify that authentication fails when the password field is a space (\" \") character",
+							"item": [
+								{
+									"name": "auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let jsonData;",
+													"",
+													"pm.test(\"The user should receive a 200 OK response\", function () {",
+													"    pm.response.to.have.status(200);",
+													"    jsonData = pm.response.json();",
+													"});",
+													"",
+													"pm.test(\"'reason' in response body equals 'Bad credentials'\", function () {",
+													"    pm.expect(jsonData.reason).to.eql(\"Bad credentials\");",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"username\": \"admin\",\n    \"password\": \" \"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://restful-booker.herokuapp.com/auth",
+											"protocol": "https",
+											"host": [
+												"restful-booker",
+												"herokuapp",
+												"com"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Verify that authentication fails when the password field is wrong",
+							"item": [
+								{
+									"name": "auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let jsonData;",
+													"",
+													"pm.test(\"The user should receive a 200 OK response\", function () {",
+													"    pm.response.to.have.status(200);",
+													"    jsonData = pm.response.json();",
+													"});",
+													"",
+													"pm.test(\"'reason' in response body equals 'Bad credentials'\", function () {",
+													"    pm.expect(jsonData.reason).to.eql(\"Bad credentials\");",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"asd\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://restful-booker.herokuapp.com/auth",
+											"protocol": "https",
+											"host": [
+												"restful-booker",
+												"herokuapp",
+												"com"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Create Booking",
+			"item": [
+				{
+					"name": "Verify that the user can successfully create a booking with valid credentials",
+					"item": [
+						{
+							"name": "booking",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let jsonData;",
+											"let bookingId;",
+											"",
+											"pm.test(\"The user should receive status code 200 in the response\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    jsonData = pm.response.json();",
+											"});",
+											"",
+											"pm.test(\"The response body should have 'bookingid' item and it should be a number\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"bookingid\").that.is.a(\"number\");",
+											"    bookingId = jsonData.bookingid;",
+											"    pm.collectionVariables.set(\"bookingId\", bookingId);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstname\" : \"Jim\",\n    \"lastname\" : \"Brown\",\n    \"totalprice\" : 111,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    },\n    \"additionalneeds\" : \"Breakfast\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://restful-booker.herokuapp.com/booking",
+									"protocol": "https",
+									"host": [
+										"restful-booker",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "booking/1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let jsonData;",
+											"let sentFirstname;",
+											"let sentLastname;",
+											"let receivedFirstname = pm.collectionVariables.get(\"firstName\");",
+											"let receivedLastname = pm.collectionVariables.get(\"lastName\");",
+											"",
+											"",
+											"pm.test(\"The user should receive status code 200 in the response\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    jsonData = pm.response.json();",
+											"    sentFirstname = jsonData.firstname;",
+											"    sentLastname = jsonData.lastname;",
+											"});",
+											"",
+											"pm.test(\"firstname in response body equals firstname in create booking's request body\", function () {",
+											"    pm.expect(receivedFirstname).to.eql(sentFirstname);",
+											"});",
+											"",
+											"pm.test(\"lastName in response body equals firstname in create booking's request body\", function () {",
+											"    pm.expect(receivedLastname).to.eql(sentLastname);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://restful-booker.herokuapp.com/booking/{{bookingId}}",
+									"protocol": "https",
+									"host": [
+										"restful-booker",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"booking",
+										"{{bookingId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "bookingId",
+			"value": ""
+		},
+		{
+			"key": "firstName",
+			"value": "Jim",
+			"type": "string"
+		},
+		{
+			"key": "lastName",
+			"value": "Brown",
+			"type": "string"
+		}
+	]
+}
